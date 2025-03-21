@@ -28,12 +28,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // Basic route
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.json({ message: "Hello World!" });
 });
-
 
 app.use("/api/transaction/:apikey", handleTransaction);
 app.use("/api/cmpRegister", handleCmp);
+
+// cron job
+
+// MongoDB connection
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -42,6 +45,13 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB");
     // Start the server after successful database connection
+
+    setInterval(() => {
+      fetch("http://localhost:3000/").then(async (res) => {
+        const result = await res.json();
+        console.log(result);
+      });
+    }, 2 * 60 * 1000); // 2 minutes
     app.listen(port, () => {
       console.log(`Server is running on http://localhost:${port}`);
     });
