@@ -107,8 +107,7 @@ exports.cmpLogin = async (req, res) => {
     }
 
     // Compare passwords
-    const isMatch = await bcrypt.compare(password, company.password);
-    if (!isMatch) {
+    if(company.password !== password) {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials"
