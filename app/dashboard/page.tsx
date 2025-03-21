@@ -9,9 +9,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input"
 import { Copy, CheckCircle, AlertCircle, BarChart3, Activity, Clock } from "lucide-react"
 import { DashboardNav } from "@/components/dashboard-nav"
+import { TransactionChart } from "@/components/transaction-chart"
+import { FraudDistributionChart } from "@/components/fraud-distribution-chart"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export default function DashboardPage() {
   const [copied, setCopied] = useState(false)
+  const [timeRange, setTimeRange] = useState("7d")
   const apiKey = "fd_test_01HPQW3JVNZ5T6G7H8J9K0L1M2"
 
   const copyApiKey = () => {
@@ -100,6 +104,46 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <Card className="lg:col-span-2">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <div>
+                <CardTitle>Transaction Activity</CardTitle>
+                <CardDescription>Fraud detection over time</CardDescription>
+              </div>
+              <Select value={timeRange} onValueChange={setTimeRange}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="Select range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="24h">Last 24 hours</SelectItem>
+                  <SelectItem value="7d">Last 7 days</SelectItem>
+                  <SelectItem value="30d">Last 30 days</SelectItem>
+                  <SelectItem value="90d">Last 90 days</SelectItem>
+                </SelectContent>
+              </Select>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <div className="h-[300px]">
+                <TransactionChart timeRange={timeRange} />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Fraud Distribution</CardTitle>
+              <CardDescription>Breakdown by transaction status</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px] flex items-center justify-center">
+                <FraudDistributionChart />
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
