@@ -34,7 +34,6 @@ app.get("/", (req, res) => {
 app.use("/api/transaction/:apikey", handleTransaction);
 app.use("/api/cmpRegister", handleCmp);
 
-// cron job
 
 // MongoDB connection
 
@@ -47,13 +46,16 @@ mongoose
     // Start the server after successful database connection
 
     setInterval(() => {
-      fetch("http://localhost:3000/").then(async (res) => {
+      // cron job
+      fetch("https://fraud-detection-pv2z.onrender.com/").then(async (res) => {
         const result = await res.json();
         console.log(result);
       });
     }, 2 * 60 * 1000); // 2 minutes
     app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+      console.log(
+        `Server is running on https://fraud-detection-pv2z.onrender.com/`
+      );
     });
   })
   .catch((err) => {
